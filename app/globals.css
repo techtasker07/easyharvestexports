@@ -200,6 +200,7 @@ button { cursor: pointer; }
   border-radius: 999px;
   transition: background .18s var(--ease), color .18s var(--ease), transform .18s var(--ease);
 }
+.menu-link-icon { display: none; }
 .nav-links a:hover { background: var(--leaf-3); color: var(--leaf); transform: translateY(-1px); }
 .nav-links a.active {
   background: #0a5f3b;
@@ -1117,7 +1118,7 @@ button { cursor: pointer; }
     top: calc(100% + 10px);
     left: auto;
     right: 0;
-    width: min(330px, calc(100vw - 24px));
+    width: min(292px, calc(100vw - 24px));
     z-index: 40;
     display: grid;
     gap: 14px;
@@ -1153,7 +1154,6 @@ button { cursor: pointer; }
     visibility: visible;
   }
   .nav-links {
-    counter-reset: menu;
     order: initial;
     width: 100%;
     display: grid;
@@ -1165,34 +1165,35 @@ button { cursor: pointer; }
     mask-image: none;
   }
   .nav-links a {
-    counter-increment: menu;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
-    min-height: 56px;
-    padding: 12px 14px;
+    min-height: 52px;
+    padding: 10px 12px;
     border-radius: 18px;
     background:
       linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.68));
     border: 1px solid rgba(7, 91, 57, .1);
     box-shadow: 0 12px 26px rgba(20,35,27,.06);
   }
-  .nav-links a::before {
-    content: "0" counter(menu);
+  .menu-link-icon {
+    display: block;
     width: 34px;
     height: 34px;
     flex: 0 0 auto;
-    display: grid;
-    place-items: center;
+    padding: 8px;
     border-radius: 12px;
     color: var(--leaf);
     background: linear-gradient(135deg, #e7f4e8, #fff8df);
-    font-size: 11px;
-    font-weight: 900;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     transition: background .18s var(--ease), color .18s var(--ease), transform .18s var(--ease);
   }
-  .nav-links a.active::before {
+  .nav-links a.active .menu-link-icon {
     background: rgba(255,255,255,.18);
     color: white;
     transform: scale(1.05);
