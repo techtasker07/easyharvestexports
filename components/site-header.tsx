@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,6 +15,11 @@ const links = [
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className="site-header">
@@ -21,14 +27,33 @@ export function SiteHeader() {
         <Link href="/" className="brand" aria-label="EasyHarvest Exports home">
           <img src="/easyharvest-logo.webp" alt="EasyHarvest Exports" />
         </Link>
-        <div className="nav-links">
-          {links.map(([label, href]) => (
-            <Link className={isActive(pathname, href) ? "active" : ""} href={href} key={href}>{label}</Link>
-          ))}
-        </div>
-        <div className="nav-actions">
+
+        <div className="mobile-header-actions">
           <Link href="/contact" className="btn small">Get Quote</Link>
-          <Link href="/track" className="btn secondary small">Track</Link>
+          <button
+            aria-controls="site-menu"
+            aria-expanded={menuOpen}
+            aria-label="Toggle navigation menu"
+            className={`menu-toggle ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen((open) => !open)}
+            type="button"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+
+        <div className={`nav-panel ${menuOpen ? "open" : ""}`} id="site-menu">
+          <div className="nav-links">
+            {links.map(([label, href]) => (
+              <Link className={isActive(pathname, href) ? "active" : ""} href={href} key={href}>{label}</Link>
+            ))}
+          </div>
+          <div className="nav-actions">
+            <Link href="/contact" className="btn small">Get Quote</Link>
+            <Link href="/track" className="btn secondary small">Track</Link>
+          </div>
         </div>
       </nav>
     </header>
