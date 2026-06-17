@@ -128,14 +128,29 @@ export function PostFeed() {
                 <p>{post.body}</p>
                 {post.cta_label && post.cta_url ? <Link className="btn small gold" href={post.cta_url}>{post.cta_label}</Link> : null}
                 <div className="post-actions">
-                  <button className="action-btn reaction" onClick={() => react(post.id, "like")}>Like <strong>{postCounts.like}</strong></button>
-                  <button className="action-btn reaction" onClick={() => react(post.id, "dislike")}>Dislike <strong>{postCounts.dislike}</strong></button>
-                  <button className="action-btn reaction" onClick={() => react(post.id, "share")}>Share <strong>{postCounts.share}</strong></button>
+                  <button className="action-btn reaction" onClick={() => react(post.id, "like")} aria-label="Like post">
+                    <ReactionIcon name="like" />
+                    <span className="reaction-label">Like</span>
+                    <strong>{postCounts.like}</strong>
+                  </button>
+                  <button className="action-btn reaction" onClick={() => react(post.id, "dislike")} aria-label="Dislike post">
+                    <ReactionIcon name="dislike" />
+                    <span className="reaction-label">Dislike</span>
+                    <strong>{postCounts.dislike}</strong>
+                  </button>
+                  <button className="action-btn reaction" onClick={() => react(post.id, "share")} aria-label="Share post">
+                    <ReactionIcon name="share" />
+                    <span className="reaction-label">Share</span>
+                    <strong>{postCounts.share}</strong>
+                  </button>
                   <button
                     className={`action-btn reaction ${openCommentForms[post.id] ? "active" : ""}`}
                     onClick={() => setOpenCommentForms((prev) => ({ ...prev, [post.id]: !prev[post.id] }))}
+                    aria-label="Comment on post"
                   >
-                    Comment <strong>{(comments[post.id] || []).length}</strong>
+                    <ReactionIcon name="comment" />
+                    <span className="reaction-label">Comment</span>
+                    <strong>{(comments[post.id] || []).length}</strong>
                   </button>
                 </div>
                 <div className="comments">
@@ -198,6 +213,38 @@ function CommentView({ comment }: { comment: Comment }) {
         </div>
       ) : null}
     </div>
+  );
+}
+
+function ReactionIcon({ name }: { name: "like" | "dislike" | "share" | "comment" }) {
+  if (name === "share") {
+    return (
+      <svg className="reaction-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8.5 12.5 15.5 8.5" />
+        <path d="M8.5 12.5 15.5 16.5" />
+        <circle cx="6" cy="13.8" r="2.6" />
+        <circle cx="18" cy="7" r="2.6" />
+        <circle cx="18" cy="17" r="2.6" />
+      </svg>
+    );
+  }
+  if (name === "comment") {
+    return (
+      <svg className="reaction-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 6.8A4 4 0 0 1 9 3h6a4 4 0 0 1 4 4v4.2a4 4 0 0 1-4 4H10l-4.5 4v-4.6A4 4 0 0 1 5 11.2Z" />
+        <path d="M9 8h6" />
+        <path d="M9 11.5h4" />
+      </svg>
+    );
+  }
+  return (
+    <svg className="reaction-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <g transform={name === "dislike" ? "rotate(180 12 12)" : undefined}>
+        <path d="M7.5 10.5v8" />
+        <path d="M4.5 10.5h3v8h-3a1.5 1.5 0 0 1-1.5-1.5v-5A1.5 1.5 0 0 1 4.5 10.5Z" />
+        <path d="M7.5 11.2 11 4.5a2 2 0 0 1 3.7 1.2l-.4 3.3h3.2a2.4 2.4 0 0 1 2.3 3l-1.4 5a3.1 3.1 0 0 1-3 2.3H7.5" />
+      </g>
+    </svg>
   );
 }
 
