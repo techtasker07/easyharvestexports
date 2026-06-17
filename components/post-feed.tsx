@@ -12,6 +12,7 @@ export function PostFeed() {
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
   const [counts, setCounts] = useState<Counts>({});
   const [drafts, setDrafts] = useState<Record<string, { name: string; body: string }>>({});
+  const [openCommentForms, setOpenCommentForms] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState("");
   const [commentModalPost, setCommentModalPost] = useState<Post | null>(null);
@@ -130,6 +131,12 @@ export function PostFeed() {
                   <button className="action-btn reaction" onClick={() => react(post.id, "like")}>Like <strong>{postCounts.like}</strong></button>
                   <button className="action-btn reaction" onClick={() => react(post.id, "dislike")}>Dislike <strong>{postCounts.dislike}</strong></button>
                   <button className="action-btn reaction" onClick={() => react(post.id, "share")}>Share <strong>{postCounts.share}</strong></button>
+                  <button
+                    className={`action-btn reaction ${openCommentForms[post.id] ? "active" : ""}`}
+                    onClick={() => setOpenCommentForms((prev) => ({ ...prev, [post.id]: !prev[post.id] }))}
+                  >
+                    Comment <strong>{(comments[post.id] || []).length}</strong>
+                  </button>
                 </div>
                 <div className="comments">
                   <div className="comment-head">Comments {(comments[post.id] || []).length}</div>
@@ -137,11 +144,15 @@ export function PostFeed() {
                   {(comments[post.id] || []).length > 3 ? (
                     <button className="action-btn" onClick={() => setCommentModalPost(post)}>View all comments</button>
                   ) : null}
-                  <div className="grid two">
-                    <input className="input" placeholder="Your name" value={postDraft.name} onChange={(event) => setDrafts((prev) => ({ ...prev, [post.id]: { ...postDraft, name: event.target.value } }))} />
-                    <input className="input" placeholder="Write a comment" value={postDraft.body} onChange={(event) => setDrafts((prev) => ({ ...prev, [post.id]: { ...postDraft, body: event.target.value } }))} />
-                  </div>
-                  <button className="btn small secondary" onClick={() => addComment(post.id)}>Comment</button>
+                  {openCommentForms[post.id] ? (
+                    <div className="comment-compose">
+                      <div className="grid two">
+                        <input className="input" placeholder="Your name" value={postDraft.name} onChange={(event) => setDrafts((prev) => ({ ...prev, [post.id]: { ...postDraft, name: event.target.value } }))} />
+                        <input className="input" placeholder="Write a comment" value={postDraft.body} onChange={(event) => setDrafts((prev) => ({ ...prev, [post.id]: { ...postDraft, body: event.target.value } }))} />
+                      </div>
+                      <button className="btn small secondary" onClick={() => addComment(post.id)}>Submit Comment</button>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </article>
