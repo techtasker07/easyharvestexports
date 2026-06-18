@@ -18,7 +18,7 @@ export function SiteFooter() {
         </div>
         <div>
           <strong>Contact</strong>
-          <p><a href="mailto:info@easyharvestexports.com">info@easyharvestexports.com</a><br /><a href="https://wa.me/" target="_blank">WhatsApp</a></p>
+          <p><a href="mailto:sales@easyharvestexports.com">sales@easyharvestexports.com</a><br /><a href="https://wa.me/" target="_blank">WhatsApp</a></p>
         </div>
       </div>
     </footer>
