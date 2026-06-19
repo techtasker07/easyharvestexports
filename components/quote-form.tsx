@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase, trackingCode } from "@/lib/supabase";
+import { recordActivity } from "@/lib/activity";
 import type { Product } from "@/lib/types";
 
 export function QuoteForm() {
@@ -48,6 +49,7 @@ export function QuoteForm() {
       }
     }
     setSavedCode(code);
+    void recordActivity("quote_submitted", `Quote request for ${form.product_interest}`, { product: form.product_interest });
     setBusy(false);
   }
 

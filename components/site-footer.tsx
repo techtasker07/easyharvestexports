@@ -14,7 +14,7 @@ export function SiteFooter() {
         </div>
         <div>
           <strong>Buyer desk</strong>
-          <p><Link href="/track">Track quote</Link><br /><Link href="/documentation">Documentation</Link><br /><Link href="/export-process">Export process</Link></p>
+          <p><Link href="/track">Track quote</Link><br /><Link href="/documentation">Documentation</Link><br /><Link href="/export-process">Export process</Link><br /><Link href="/privacy-terms">Privacy and terms</Link></p>
         </div>
         <div>
           <strong>Contact</strong>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { ActivityTracker } from "@/components/activity-tracker";
+import { HarvestAssistant } from "@/components/harvest-assistant";
 
 export const metadata: Metadata = {
   title: "EasyHarvest Exports",
@@ -12,9 +14,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
+        <ActivityTracker />
         <SiteHeader />
         {children}
         <SiteFooter />
+        <HarvestAssistant />
       </body>
     </html>
   );

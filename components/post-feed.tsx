@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { recordActivity } from "@/lib/activity";
 import { supabase, visitorId } from "@/lib/supabase";
 import type { Comment, Post } from "@/lib/types";
 
@@ -85,6 +86,7 @@ export function PostFeed() {
       const { error } = await supabase.from("post_reactions").insert({ post_id: postId, reaction, visitor_id: visitorId() });
       if (error) setNotice(error.message);
     }
+    void recordActivity("post_reaction", reaction, { post_id: postId });
   }
 
   async function addComment(postId: string) {
@@ -103,6 +105,7 @@ export function PostFeed() {
       const { error } = await supabase.from("comments").insert({ post_id: postId, author_name: draft.name, body: draft.body, visitor_id: visitorId() });
       if (error) setNotice(error.message);
     }
+    void recordActivity("post_comment", "Submitted a post comment", { post_id: postId });
   }
 
   if (loading) {

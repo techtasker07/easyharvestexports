@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import type { Comment, Post, Product, Quote, QuoteMessage } from "@/lib/types";
+import type { BotMessage, Comment, Post, Product, Quote, QuoteMessage, SiteActivityEvent, SiteActivitySession } from "@/lib/types";
 
-type Tab = "overview" | "posts" | "products" | "quotes" | "comments";
+type Tab = "overview" | "posts" | "products" | "quotes" | "comments" | "bot" | "activity";
 
 const ADMIN_PASSCODE = "Admin@.7";
 const ADMIN_SESSION_KEY = "easyharvest_admin_passcode_ok";
@@ -17,7 +17,8 @@ const sitePages = [
   { label: "Documentation", value: "/documentation" },
   { label: "Export Process", value: "/export-process" },
   { label: "Request Quote", value: "/contact" },
-  { label: "Track Quote", value: "/track" }
+  { label: "Track Quote", value: "/track" },
+  { label: "Privacy and Terms", value: "/privacy-terms" }
 ];
 
 export function AdminConsole() {
@@ -30,6 +31,9 @@ export function AdminConsole() {
   const [quoteMessages, setQuoteMessages] = useState<Record<string, QuoteMessage[]>>({});
   const [quoteReplies, setQuoteReplies] = useState<Record<string, string>>({});
   const [comments, setComments] = useState<Comment[]>([]);
+  const [botMessages, setBotMessages] = useState<BotMessage[]>([]);
+  const [activitySessions, setActivitySessions] = useState<SiteActivitySession[]>([]);
+  const [activityEvents, setActivityEvents] = useState<SiteActivityEvent[]>([]);
   const [commentReplies, setCommentReplies] = useState<Record<string, string>>({});
   const [newPost, setNewPost] = useState({ title: "", body: "", image_url: "", cta_label: "", cta_url: "" });
   const [postImage, setPostImage] = useState<File | null>(null);
@@ -49,16 +53,22 @@ export function AdminConsole() {
   useEffect(() => {
     async function load() {
       if (!supabase || !isAdmin) return;
-      const [postRows, productRows, quoteRows, commentRows] = await Promise.all([
+      const [postRows, productRows, quoteRows, commentRows, botRows, sessionRows, eventRows] = await Promise.all([
         supabase.from("posts").select("*").order("created_at", { ascending: false }),
         supabase.from("products").select("*").order("created_at", { ascending: false }),
         supabase.from("quotes").select("*").order("created_at", { ascending: false }),
-        supabase.from("comments").select("*").order("created_at", { ascending: false })
+        supabase.from("comments").select("*").order("created_at", { ascending: false }),
+        supabase.from("bot_messages").select("*").order("created_at", { ascending: false }).limit(160),
+        supabase.from("site_activity_sessions").select("*").order("last_seen_at", { ascending: false }).limit(100),
+        supabase.from("site_activity_events").select("*").order("created_at", { ascending: false }).limit(160)
       ]);
       if (postRows.data?.length) setPosts(postRows.data as Post[]);
       if (productRows.data?.length) setProducts(productRows.data as Product[]);
       if (quoteRows.data) setQuotes(quoteRows.data as Quote[]);
       if (commentRows.data) setComments(commentRows.data as Comment[]);
+      if (botRows.data) setBotMessages(botRows.data as BotMessage[]);
+      if (sessionRows.data) setActivitySessions(sessionRows.data as SiteActivitySession[]);
+      if (eventRows.data) setActivityEvents(eventRows.data as SiteActivityEvent[]);
       if (quoteRows.data?.length) {
         const quoteIds = quoteRows.data.map((quote) => quote.id);
         const { data: messageRows } = await supabase.from("quote_messages").select("*").in("quote_id", quoteIds).order("created_at", { ascending: true });
@@ -256,7 +266,7 @@ export function AdminConsole() {
   return (
     <div className="admin-shell">
       <aside className="card admin-menu">
-        {(["overview", "posts", "products", "quotes", "comments"] as Tab[]).map((item) => (
+        {(["overview", "posts", "products", "quotes", "comments", "bot", "activity"] as Tab[]).map((item) => (
           <button key={item} className={tab === item ? "active" : ""} onClick={() => setTab(item)}>{title(item)}</button>
         ))}
       </aside>
@@ -265,7 +275,7 @@ export function AdminConsole() {
           <span>{notice || "Dashboard unlocked with admin passcode."}</span>
           <button className="action-btn" onClick={signOut}>Lock</button>
         </div>
-        {tab === "overview" ? <Overview posts={posts.length} products={products.length} quotes={quotes.length} comments={comments.length} /> : null}
+        {tab === "overview" ? <Overview posts={posts.length} products={products.length} quotes={quotes.length} comments={comments.length} botMessages={botMessages.length} activitySessions={activitySessions.length} /> : null}
         {tab === "posts" ? (
           <>
             <div className="admin-tab-head">
@@ -409,12 +419,50 @@ export function AdminConsole() {
               </article>
             ))}
           </div>
-        ) : null}      </section>
+        ) : null}
+        {tab === "bot" ? (
+          <div className="table-list">
+            <div className="admin-tab-head">
+              <div><span className="eyebrow">Assistant tracker</span><h3>Buyer conversations</h3></div>
+              <span className="badge">{botMessages.length} latest messages</span>
+            </div>
+            {botMessages.length ? botMessages.map((message) => (
+              <article className={`card row-card bot-log ${message.role}`} key={message.id}>
+                <div className="row-top">
+                  <div><strong>{message.role === "bot" ? "EasyHarvest Assistant" : "Website visitor"}</strong><p>{message.content}</p></div>
+                  <span className="badge">{message.created_at ? new Date(message.created_at).toLocaleString() : "Recent"}</span>
+                </div>
+                <div className="log-meta">
+                  <span>Visitor: {shortId(message.visitor_id)}</span>
+                  <span>Intent: {message.intent_id || "free question"}</span>
+                  <span>Page: {message.page_path || "-"}</span>
+                </div>
+              </article>
+            )) : <div className="empty-state">No bot conversations have been recorded yet. Run the bot activity schema, then open the home page assistant.</div>}
+          </div>
+        ) : null}
+        {tab === "activity" ? (
+          <div className="table-list">
+            <div className="admin-tab-head">
+              <div><span className="eyebrow">Visitor tracker</span><h3>Website activity and time spent</h3></div>
+              <span className="badge">{activitySessions.length} recent sessions</span>
+            </div>
+            {activitySessions.length ? activitySessions.map((session) => (
+              <article className="card row-card activity-session" key={session.id}>
+                <div className="row-top"><div><strong>Visitor {shortId(session.visitor_id)}</strong><p>{session.last_path || "Website visit"}</p></div><span className="badge">{formatDuration(session.duration_seconds)}</span></div>
+                <div className="quote-detail-grid"><p><strong>Pages viewed:</strong> {session.page_views}</p><p><strong>Started:</strong> {session.started_at ? new Date(session.started_at).toLocaleString() : "Unknown"}</p><p><strong>Last seen:</strong> {session.last_seen_at ? new Date(session.last_seen_at).toLocaleString() : "Unknown"}</p><p><strong>Session:</strong> {shortId(session.session_id)}</p></div>
+              </article>
+            )) : <div className="empty-state">No visitor sessions have been recorded yet. Run the bot activity schema and visit the public website.</div>}
+            <div className="admin-tab-head activity-events-head"><div><span className="eyebrow">Event stream</span><h3>Recent user actions</h3></div></div>
+            {activityEvents.map((event) => <article className="card row-card log-event" key={event.id}><div><strong>{event.event_type.replace(/_/g, " ")}</strong><p>{event.event_label}</p></div><span>{event.page_path || "-"} · {event.created_at ? new Date(event.created_at).toLocaleString() : "Recent"}</span></article>)}
+          </div>
+        ) : null}
+      </section>
     </div>
   );
 }
 
-function Overview(props: { posts: number; products: number; quotes: number; comments: number }) {
+function Overview(props: { posts: number; products: number; quotes: number; comments: number; botMessages: number; activitySessions: number }) {
   return (
     <div className="grid four">
       {Object.entries(props).map(([key, value]) => (
@@ -466,6 +514,16 @@ function title(value: string) {
 
 function slugify(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+function shortId(value: string) {
+  return value.length > 12 ? `${value.slice(0, 8)}...${value.slice(-4)}` : value;
+}
+
+function formatDuration(seconds: number) {
+  const minutes = Math.floor(Math.max(0, seconds) / 60);
+  const remainder = Math.max(0, seconds) % 60;
+  return minutes ? `${minutes}m ${remainder}s` : `${remainder}s`;
 }
 
 

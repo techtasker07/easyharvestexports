@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { recordActivity } from "@/lib/activity";
 import type { Quote, QuoteMessage } from "@/lib/types";
 
 export function TrackQuote() {
@@ -31,6 +32,7 @@ export function TrackQuote() {
     setQuote(data as Quote);
     const { data: rows } = await supabase.from("quote_messages").select("*").eq("quote_id", data.id).order("created_at", { ascending: true });
     setMessages((rows || []) as QuoteMessage[]);
+    void recordActivity("quote_tracked", "Quote tracking code checked");
   }
 
   async function sendReply() {
@@ -41,6 +43,7 @@ export function TrackQuote() {
     if (supabase) {
       await supabase.from("quote_messages").insert({ quote_id: quote.id, sender_name: quote.buyer_name, sender_role: "buyer", message: optimistic.message });
     }
+    void recordActivity("quote_reply", "Buyer replied to a quote", { quote_id: quote.id });
   }
 
   return (

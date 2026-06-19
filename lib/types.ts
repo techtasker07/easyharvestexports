@@ -52,3 +52,37 @@ export type QuoteMessage = {
   message: string;
   created_at?: string;
 };
+
+export type BotMessage = {
+  id: string;
+  visitor_id: string;
+  session_id: string;
+  role: "user" | "bot";
+  content: string;
+  intent_id?: string | null;
+  route?: string | null;
+  page_path?: string | null;
+  created_at?: string;
+};
+
+export type SiteActivitySession = {
+  id: string;
+  visitor_id: string;
+  session_id: string;
+  started_at?: string;
+  last_seen_at?: string;
+  duration_seconds: number;
+  page_views: number;
+  last_path?: string | null;
+  user_agent?: string | null;
+};
+
+export type SiteActivityEvent = {
+  id: string;
+  visitor_id: string;
+  session_id: string;
+  event_type: string;
+  event_label: string;
+  page_path?: string | null;
+  created_at?: string;
+};
