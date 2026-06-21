@@ -876,7 +876,7 @@ button { cursor: pointer; }
   gap: 14px;
   perspective: 900px;
 }
-.doc-stack div {
+.doc-stack > * {
   padding: 24px;
   border-radius: 18px;
   color: var(--leaf);
@@ -886,10 +886,19 @@ button { cursor: pointer; }
   box-shadow: 0 24px 60px rgba(0,0,0,.2);
   transform: rotate(-2deg);
 }
-.doc-stack div:nth-child(even) {
+.doc-stack > :nth-child(even) {
   transform: rotate(2deg) translateX(24px);
   background: #fff8df;
 }
+.doc-stack-button {
+  width: 100%;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+}
+.doc-stack-button:hover { transform: rotate(2deg) translateX(24px) translateY(-5px); background: #ffeaa8; box-shadow: 0 30px 70px rgba(0,0,0,.28); }
+.doc-stack-button:focus-visible { outline: 3px solid var(--gold-2); outline-offset: 5px; }
 .doc-layout {
   display: grid;
   grid-template-columns: minmax(280px, .7fr) minmax(0, 1.3fr);
@@ -1602,7 +1611,7 @@ button { cursor: pointer; }
   .shipment-modal-body { gap: 18px; padding: 18px; }.shipment-intro { grid-template-columns: 1fr; padding: 20px; }.shipment-intro p, .shipment-intro .btn { grid-column: auto; grid-row: auto; }.shipment-intro .btn { width: 100%; }
   .shipment-sections { grid-template-columns: 1fr; }.shipment-process { padding: 20px; }.shipment-process h3 { font-size: 25px; }.shipment-footer { display: grid; gap: 16px; }
   .rich-editor { min-height: 200px; }
-  .doc-stack div:nth-child(even), .doc-stack div {
+  .doc-stack > :nth-child(even), .doc-stack > * {
     transform: none;
   }
   .footer {
@@ -1663,7 +1672,7 @@ button { cursor: pointer; }
   .post-media img { height: 100%; }
   .admin-menu button { min-width: 112px; }
   .about-visual { min-height: 300px; }
-  .doc-stack div { padding: 18px; }
+  .doc-stack > * { padding: 18px; }
   .assistant-launcher span { display: none; }
   .assistant-launcher { width: 58px; height: 58px; justify-content: center; padding: 0; border-radius: 20px; }
   .assistant-launcher svg { width: 38px; height: 38px; }

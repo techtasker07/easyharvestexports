@@ -7,7 +7,12 @@ import { HarvestAssistant } from "@/components/harvest-assistant";
 
 export const metadata: Metadata = {
   title: "EasyHarvest Exports",
-  description: "Premium Nigerian agro commodities, export documentation, buyer quotes, and shipment follow-up."
+  description: "Premium Nigerian agro commodities, export documentation, buyer quotes, and shipment follow-up.",
+  icons: {
+    icon: "/easyharvest-logo.webp",
+    shortcut: "/easyharvest-logo.webp",
+    apple: "/easyharvest-logo.webp"
+  }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

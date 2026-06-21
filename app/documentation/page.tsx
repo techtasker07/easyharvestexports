@@ -41,7 +41,7 @@ export default function DocumentationPage() {
       <section className="doc-hero">
         <div className="container doc-hero-grid">
           <div>
-            <span className="eyebrow">Documentation</span>
+            <span className="eyebrow">Documentation & Certificates</span>
             <h1>Export paperwork presented with clarity before shipment decisions</h1>
             <p>Documentation needs differ by product, destination, and buyer requirements. EasyHarvest collects those details through the quote workflow and keeps follow-up visible in the quote thread.</p>
           </div>
@@ -49,7 +49,7 @@ export default function DocumentationPage() {
             <div>Commercial Invoice</div>
             <div>Packing List</div>
             <div>Product Specification</div>
-            <div>Certificates</div>
+            <button className="doc-stack-button" onClick={() => setShipmentOpen(true)} type="button">Certificates</button>
           </div>
         </div>
       </section>
