@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { recordActivity } from "@/lib/activity";
+import { RichContent } from "@/components/rich-content";
 import { supabase, visitorId } from "@/lib/supabase";
 import type { Comment, Post } from "@/lib/types";
 
@@ -128,7 +129,8 @@ export function PostFeed() {
               <div className="body">
                 <div className="post-meta"><span>Market post</span><span>{post.created_at ? new Date(post.created_at).toLocaleDateString() : "Live update"}</span></div>
                 <h3>{post.title}</h3>
-                <p>{post.body}</p>
+                {post.subtitle ? <h2 className="post-subtitle">{post.subtitle}</h2> : null}
+                <RichContent className="post-rich-content" value={post.body} />
                 {post.cta_label && post.cta_url ? <Link className="btn small gold" href={post.cta_url}>{post.cta_label}</Link> : null}
                 <div className="post-actions">
                   <button className="action-btn reaction" onClick={() => react(post.id, "like")} aria-label="Like post">

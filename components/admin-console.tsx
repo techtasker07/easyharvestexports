@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { BotMessage, Comment, Post, Product, Quote, QuoteMessage, SiteActivityEvent, SiteActivitySession } from "@/lib/types";
+import { RichTextEditor } from "@/components/rich-text-editor";
+import { RichContent } from "@/components/rich-content";
 
 type Tab = "overview" | "posts" | "products" | "quotes" | "comments" | "bot" | "activity";
 
@@ -35,7 +37,7 @@ export function AdminConsole() {
   const [activitySessions, setActivitySessions] = useState<SiteActivitySession[]>([]);
   const [activityEvents, setActivityEvents] = useState<SiteActivityEvent[]>([]);
   const [commentReplies, setCommentReplies] = useState<Record<string, string>>({});
-  const [newPost, setNewPost] = useState({ title: "", body: "", image_url: "", cta_label: "", cta_url: "" });
+  const [newPost, setNewPost] = useState({ title: "", subtitle: "", body: "", image_url: "", cta_label: "", cta_url: "" });
   const [postImage, setPostImage] = useState<File | null>(null);
   const [editingPostId, setEditingPostId] = useState("");
   const [newProduct, setNewProduct] = useState({ name: "", summary: "", description: "", image_url: "", specs: "" });
@@ -161,6 +163,7 @@ export function AdminConsole() {
     setEditingPostId(post.id);
     setNewPost({
       title: post.title,
+      subtitle: post.subtitle || "",
       body: post.body,
       image_url: post.image_url || "",
       cta_label: post.cta_label || "",
@@ -205,7 +208,7 @@ export function AdminConsole() {
 
   function resetPostForm() {
     setEditingPostId("");
-    setNewPost({ title: "", body: "", image_url: "", cta_label: "", cta_url: "" });
+    setNewPost({ title: "", subtitle: "", body: "", image_url: "", cta_label: "", cta_url: "" });
     setPostImage(null);
   }
 
@@ -292,11 +295,12 @@ export function AdminConsole() {
               <form className="card form-panel form-grid" onSubmit={addPost}>
                 <h3>{editingPostId ? "Update home page post" : "Add home page post"}</h3>
                 <input className="input" required placeholder="Post title" value={newPost.title} onChange={(event) => setNewPost({ ...newPost, title: event.target.value })} />
+                <input className="input" placeholder="Post subtitle (H2)" value={newPost.subtitle} onChange={(event) => setNewPost({ ...newPost, subtitle: event.target.value })} />
                 <label className="upload-field">
                   <span>{postImage ? postImage.name : editingPostId ? "Choose a new image or keep existing" : "Choose post image from device"}</span>
                   <input type="file" accept="image/*" onChange={(event) => setPostImage(event.target.files?.[0] || null)} />
                 </label>
-                <textarea className="textarea" required placeholder="Write-up" value={newPost.body} onChange={(event) => setNewPost({ ...newPost, body: event.target.value })} />
+                <RichTextEditor value={newPost.body} onChange={(body) => setNewPost({ ...newPost, body })} placeholder="Paste or write the post content here" />
                 <div className="grid two">
                   <input className="input" placeholder="Action button label" value={newPost.cta_label} onChange={(event) => setNewPost({ ...newPost, cta_label: event.target.value })} />
                   <select className="select" value={newPost.cta_url} onChange={(event) => setNewPost({ ...newPost, cta_url: event.target.value })}>
@@ -312,7 +316,8 @@ export function AdminConsole() {
                   {post.image_url ? <img src={post.image_url} alt={post.title} /> : null}
                   <div>
                     <strong>{post.title}</strong>
-                    <p>{post.body}</p>
+                    {post.subtitle ? <h3 className="post-subtitle">{post.subtitle}</h3> : null}
+                    <RichContent className="post-rich-content" value={post.body} />
                     <div className="post-actions">
                       <button className="action-btn" onClick={() => editPost(post)}>Edit</button>
                       <button className="action-btn danger" disabled={busy === `delete-post-${post.id}`} onClick={() => deletePost(post)}>{busy === `delete-post-${post.id}` ? "Deleting..." : "Delete"}</button>

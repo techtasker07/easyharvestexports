@@ -38,6 +38,7 @@ create table if not exists public.products (
 create table if not exists public.posts (
   id uuid primary key default gen_random_uuid(),
   title text not null,
+  subtitle text,
   body text not null,
   image_url text not null default '',
   cta_label text,
@@ -46,6 +47,8 @@ create table if not exists public.posts (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.posts add column if not exists subtitle text;
 
 create table if not exists public.comments (
   id uuid primary key default gen_random_uuid(),

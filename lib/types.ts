@@ -12,6 +12,7 @@ export type Product = {
 export type Post = {
   id: string;
   title: string;
+  subtitle?: string | null;
   body: string;
   image_url: string;
   cta_label?: string | null;
