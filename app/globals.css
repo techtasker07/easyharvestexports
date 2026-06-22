@@ -893,10 +893,16 @@ button { cursor: pointer; }
 .doc-stack-button {
   width: 100%;
   border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   text-align: left;
   cursor: pointer;
   transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
 }
+.doc-stack-button svg { width: 25px; height: 25px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .22s var(--ease); }
+.doc-stack-button:hover svg { transform: translateX(5px); }
 .doc-stack-button:hover { transform: rotate(2deg) translateX(24px) translateY(-5px); background: #ffeaa8; box-shadow: 0 30px 70px rgba(0,0,0,.28); }
 .doc-stack-button:focus-visible { outline: 3px solid var(--gold-2); outline-offset: 5px; }
 .doc-layout {

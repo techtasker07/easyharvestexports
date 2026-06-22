@@ -49,7 +49,10 @@ export default function DocumentationPage() {
             <div>Commercial Invoice</div>
             <div>Packing List</div>
             <div>Product Specification</div>
-            <button className="doc-stack-button" onClick={() => setShipmentOpen(true)} type="button">Certificates</button>
+            <button className="doc-stack-button" onClick={() => setShipmentOpen(true)} type="button">
+              <span>Certificates</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13" /><path d="m13 6 6 6-6 6" /></svg>
+            </button>
           </div>
         </div>
       </section>
