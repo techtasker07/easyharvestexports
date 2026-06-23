@@ -1694,7 +1694,7 @@ button { cursor: pointer; }
   .legal-actions .btn { width: 100%; }
   .legal-section { grid-template-columns: 1fr; }
   .shipment-modal-hero { padding: 20px; }.shipment-modal-hero h2 { font-size: 27px; }.shipment-modal-body { padding: 14px; }.shipment-section, .shipment-intro { padding: 17px; }.shipment-footer { padding: 18px; }
-  .rich-editor-tools { gap: 5px; }.rich-editor-tools button { min-width: 31px; padding: 0 7px; }.post-subtitle, .post-rich-content h2 { font-size: 22px; }
+  .rich-editor-tools { gap: 5px; }.rich-editor-tools button { min-width: 31px; padding: 0 7px; }.post-subtitle { font-size: 15px; }.post-rich-content h2 { font-size: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
