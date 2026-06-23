@@ -333,8 +333,10 @@ button { cursor: pointer; }
   border-radius: 22px;
   background: rgba(255,255,255,.86);
   box-shadow: var(--shadow-soft);
+  display: grid;
+  place-items: center;
 }
-.hero-logo-panel img { width: min(380px, 100%); display: block; }
+.hero-logo-panel img { width: min(380px, 100%); display: block; margin: 0 auto; }
 .harvest-board {
   position: absolute;
   left: 34px;
