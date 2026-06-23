@@ -141,7 +141,7 @@ export function PostFeed() {
                 >
                   {isExpanded ? "Read less" : "Read more"}
                 </button>
-                {post.cta_label && post.cta_url ? <Link className="btn small gold" href={post.cta_url}>{post.cta_label}</Link> : null}
+                {post.cta_label && post.cta_url ? <Link className="btn small gold post-cta" href={post.cta_url}>{post.cta_label}</Link> : null}
                 <div className="post-actions">
                   <button className="action-btn reaction" onClick={() => react(post.id, "like")} aria-label="Like post">
                     <ReactionIcon name="like" />
