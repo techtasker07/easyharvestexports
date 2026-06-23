@@ -40,7 +40,7 @@ export default function Home() {
           <div className="section-head">
             <div>
               <span className="eyebrow">Interactive updates</span>
-              <h2>Posts buyers can react to, comment on, and share</h2>
+              <h3>Posts buyers can react to, comment on, and share</h3>
             </div>
             <p>The owner can publish market notes, product updates, shipment readiness posts, and campaign announcements from the admin console.</p>
           </div>
@@ -57,7 +57,9 @@ export default function Home() {
             <Link className="btn" href="/export-process">View Process</Link>
           </div>
           <div className="process">
-            {processSteps.map((step) => <div className="card process-item" key={step}>{step}</div>)}
+            {processSteps.map((step) => (
+              <div className="card process-item" key={step}>{step}</div>
+            ))}
           </div>
         </div>
       </section>

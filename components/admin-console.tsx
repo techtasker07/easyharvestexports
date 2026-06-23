@@ -316,7 +316,7 @@ export function AdminConsole() {
                   {post.image_url ? <img src={post.image_url} alt={post.title} /> : null}
                   <div>
                     <strong>{post.title}</strong>
-                    {post.subtitle ? <h3 className="post-subtitle">{post.subtitle}</h3> : null}
+                    {post.subtitle ? <h4 className="post-subtitle">{post.subtitle}</h4> : null}
                     <RichContent className="post-rich-content" value={post.body} />
                     <div className="post-actions">
                       <button className="action-btn" onClick={() => editPost(post)}>Edit</button>
