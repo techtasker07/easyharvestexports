@@ -462,8 +462,8 @@ button { cursor: pointer; }
 .product-card .body, .post-card .body { padding: 22px; }
 .product-card h3, .post-card h3 { margin: 0 0 8px; font-size: 22px; line-height: 1.15; }
 .product-card p, .post-card p { color: var(--muted); line-height: 1.6; }
-.post-subtitle { margin: 0 0 14px; color: var(--leaf); font-size: 25px; line-height: 1.2; }
-.post-rich-content { color: var(--muted); line-height: 1.7; }
+.post-subtitle { margin: 0 0 14px; color: var(--leaf); font-size: 17px; line-height: 1.35; }
+.post-rich-content, .post-card .post-rich-content p, .post-card .post-rich-content li { color: #111111; line-height: 1.7; }
 .post-rich-content p { margin: 0 0 14px; }.post-rich-content h2 { margin: 22px 0 10px; color: var(--ink); font-size: 25px; line-height: 1.16; }
 .post-rich-content h3 { margin: 18px 0 8px; }.post-rich-content ul, .post-rich-content ol { display: grid; gap: 7px; margin: 0 0 16px; padding-left: 22px; }
 .post-rich-content blockquote { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--gold); background: #fff8df; color: #405045; }

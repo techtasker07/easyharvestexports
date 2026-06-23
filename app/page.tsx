@@ -41,9 +41,9 @@ export default function Home() {
             <div>
               <span className="eyebrow">Interactive updates</span>
               <h3>Posts buyers can react to, comment on, and share</h3>
+              <p>The owner can publish market notes, product updates, shipment readiness posts, and campaign announcements from the admin console.</p>
             </div>
-            <p>The owner can publish market notes, product updates, shipment readiness posts, and campaign announcements from the admin console.</p>
-          </div>
+            </div>
           <PostFeed />
         </div>
       </section>
