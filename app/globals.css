@@ -468,6 +468,10 @@ button { cursor: pointer; }
 .post-rich-content h3 { margin: 18px 0 8px; }.post-rich-content ul, .post-rich-content ol { display: grid; gap: 7px; margin: 0 0 16px; padding-left: 22px; }
 .post-rich-content blockquote { margin: 18px 0; padding: 14px 16px; border-left: 3px solid var(--gold); background: #fff8df; color: #405045; }
 .post-rich-content a { color: var(--leaf); font-weight: 900; text-decoration: underline; }
+.post-rich-content.collapsed { position: relative; max-height: 178px; overflow: hidden; }
+.post-rich-content.collapsed::after { content: ""; position: absolute; right: 0; bottom: 0; left: 0; height: 68px; background: linear-gradient(0deg, rgba(255,255,255,.98), rgba(255,255,255,0)); pointer-events: none; }
+.post-read-more { margin: 2px 0 4px; border: 0; padding: 4px 0; color: var(--leaf); background: transparent; font-size: 13px; font-weight: 900; text-decoration: underline; text-underline-offset: 4px; }
+.post-read-more:hover { color: var(--clay); }
 .feed-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, .8fr); gap: 24px; align-items: flex-start; }
 .feed-layout-premium {
   grid-template-columns: minmax(0, 1.45fr) minmax(300px, .75fr);

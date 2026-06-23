@@ -15,6 +15,7 @@ export function PostFeed() {
   const [counts, setCounts] = useState<Counts>({});
   const [drafts, setDrafts] = useState<Record<string, { name: string; body: string }>>({});
   const [openCommentForms, setOpenCommentForms] = useState<Record<string, boolean>>({});
+  const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState("");
   const [commentModalPost, setCommentModalPost] = useState<Post | null>(null);
@@ -123,6 +124,7 @@ export function PostFeed() {
         {visiblePosts.map((post) => {
           const postCounts = counts[post.id] || { like: 0, dislike: 0, share: 0 };
           const postDraft = drafts[post.id] || { name: "", body: "" };
+          const isExpanded = Boolean(expandedPosts[post.id]);
           return (
             <article className="card post-card" id={`post-${post.id}`} key={post.id}>
               {post.image_url ? <div className="post-media"><img src={post.image_url} alt={post.title} /></div> : null}
@@ -130,7 +132,15 @@ export function PostFeed() {
                 <div className="post-meta"><span>Market post</span><span>{post.created_at ? new Date(post.created_at).toLocaleDateString() : "Live update"}</span></div>
                 <h3>{post.title}</h3>
                 {post.subtitle ? <h2 className="post-subtitle">{post.subtitle}</h2> : null}
-                <RichContent className="post-rich-content" value={post.body} />
+                <RichContent className={`post-rich-content ${isExpanded ? "expanded" : "collapsed"}`} value={post.body} />
+                <button
+                  aria-expanded={isExpanded}
+                  className="post-read-more"
+                  onClick={() => setExpandedPosts((current) => ({ ...current, [post.id]: !isExpanded }))}
+                  type="button"
+                >
+                  {isExpanded ? "Read less" : "Read more"}
+                </button>
                 {post.cta_label && post.cta_url ? <Link className="btn small gold" href={post.cta_url}>{post.cta_label}</Link> : null}
                 <div className="post-actions">
                   <button className="action-btn reaction" onClick={() => react(post.id, "like")} aria-label="Like post">
